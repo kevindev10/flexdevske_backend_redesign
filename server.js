@@ -1,7 +1,8 @@
 const express = require('express');
 const request = require ('request');
 const fetch = require ('node-fetch');
-const cors = require('cors')
+const cors = require('cors');
+const nodemailer = require("nodemailer");
 
 
 
@@ -21,13 +22,13 @@ app.get('/', (req,res)=>{
 app.post('/contactUs', async (req,res) =>{
   try{
     
-
+      console.log(req.body)
     if(
       req.body.captcha === undefined ||
       req.body.captcha === '' ||
       req.body.captcha === null
   ){
-      return res.json({"success": false, "msg":"Please select captcha"})
+      return res.json({"success": false, "msg":"*Please  select the captcha"})
   }
   //Secret Key
   const secretKey = '6LegIIMcAAAAAJ3A4fILYSuC_FJETY_WQF3rSb4j';
@@ -43,7 +44,55 @@ app.post('/contactUs', async (req,res) =>{
     return res.json({ success: false, msg: 'Failed captcha verification' });
 
   // If successful
-  return res.json({ success: true, msg: 'Captcha passed' });
+
+  const { email, phone, yourName, message} = req.body;
+  const output = `
+		<p>You have a new message</p>
+		<h3>Website Details</h3>
+		<ul>
+			
+			<li>Your Name :${yourName}</li>
+			<li>Email :${email}</li>
+			<li>Phone :${phone}</li>
+			<h3>Message</h3>
+			<p>${message}</p>
+			
+		</ul>
+	`;
+  async function main() {
+			  
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      host: "mail.flexdevske.co.ke",
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: 'sales@flexdevske.co.ke', // generated ethereal user
+        pass: 'Achieng2021', // generated ethereal password
+      },
+      tls:{
+        rejectUnauthorized:false
+      }
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '"Nodemailer Contact" <sales@flexdevske.co.ke>', // sender address
+      to: "flexdevske@gmail.com", // list of receivers
+      subject: "Website Quotation Request", // Subject line
+      text: "Hello world?", // plain text body
+      html: output, // html body
+    });
+
+    console.log("Message sent: %s", info.messageId);
+    
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    
+  }
+
+  main().catch(console.error);
+  return res.json({ success: true, msg: 'Thanks for getting in touch! Expect an answer from us in the next few hours.' });
 
 
   }
