@@ -46,12 +46,16 @@ app.post('/contactUs', async (req,res) =>{
 
   // If successful
 
-  const { email, phone, yourName, message} = req.body;
+  const { email, phone, yourName, message, websiteType, companyType, pages, urgency} = req.body;
   const output = `
 		<p>You have a new message</p>
 		<h3>Website Details</h3>
 		<ul>
-			
+
+      <li>Website Type :${websiteType}</li>
+      <li>Company Type :${companyType}</li>
+      <li>Number of pages :${pages}</li>
+      <li>How soon do you need the website? :${ urgency}</li>
 			<li>Your Name :${yourName}</li>
 			<li>Email :${email}</li>
 			<li>Phone :${phone}</li>
@@ -70,7 +74,7 @@ app.post('/contactUs', async (req,res) =>{
       secure: false, // true for 465, false for other ports
       auth: {
         user: 'sales@flexdevske.co.ke', // generated ethereal user
-        pass: 'Achieng2021', // generated ethereal password
+        pass: 'Achieng*2021', // generated ethereal password
       },
       tls:{
         rejectUnauthorized:false
