@@ -22,8 +22,8 @@ app.get('/', (req,res)=>{
 
 app.post('/contactUs', async (req,res) =>{
   try{
-    
-      console.log(req.body)
+     
+     
     if(
       req.body.captcha === undefined ||
       req.body.captcha === '' ||
