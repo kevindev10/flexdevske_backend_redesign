@@ -17,7 +17,7 @@ app.use(express.json())
 
 
 app.get('/', (req,res)=>{
-	res.json('this is working bruh');
+	res.json('Nothing to see here, Keep it moving.');
 })
 
 app.post('/contactUs', async (req,res) =>{
